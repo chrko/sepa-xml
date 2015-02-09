@@ -1,0 +1,1 @@
+Abstracting many SEPA XML generating libraries to follow structures that are reasonable.

@@ -1,0 +1,23 @@
+{
+    "name": "chrko/sepa-xml",
+    "description": "SEPA Abstraction library",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Christian Kohlstedde",
+            "email": "christian@kohlsted.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ChrKo\\SEPA\\": "lib/"
+        }
+    },
+    "require": {
+        "doctrine/collections": "~1.2"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "~2.6"
+    }
+}
