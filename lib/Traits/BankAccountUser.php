@@ -2,7 +2,7 @@
 
 namespace ChrKo\SEPA\Traits;
 
-use ChrKo\SEPA\Interfaces\BankAccount as IBankAccount;
+use ChrKo\SEPA\BankAccount;
 
 /**
  * Class BankAccountUser
@@ -11,16 +11,16 @@ use ChrKo\SEPA\Interfaces\BankAccount as IBankAccount;
 trait BankAccountUser
 {
     /**
-     * @var IBankAccount
+     * @var BankAccount
      */
     protected $bankAccount;
 
     /**
-     * @param IBankAccount $bankAccount
+     * @param BankAccount $bankAccount
      *
      * @return $this
      */
-    public function setBankAccount(IBankAccount $bankAccount)
+    public function setBankAccount(BankAccount $bankAccount)
     {
         $this->bankAccount = $bankAccount;
 
@@ -28,7 +28,7 @@ trait BankAccountUser
     }
 
     /**
-     * @return IBankAccount
+     * @return BankAccount
      */
     public function getBankAccount()
     {

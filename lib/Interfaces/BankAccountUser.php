@@ -2,6 +2,8 @@
 
 namespace ChrKo\SEPA\Interfaces;
 
+use ChrKo\SEPA\BankAccount;
+
 /**
  * Interface BankAccountUser
  * @package ChrKo\SEPA\Interfaces

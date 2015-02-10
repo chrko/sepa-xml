@@ -1,23 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: christian
- * Date: 09.02.15
- * Time: 19:30
- */
 
-namespace ChrKo\SEPA\Abstracts;
+namespace ChrKo\SEPA;
 
-use ChrKo\SEPA\Interfaces\Creditor as ICreditor;
-use ChrKo\SEPA\Interfaces\DirectDebit as IDirectDebit;
-use ChrKo\SEPA\Interfaces\Mandate as IMandate;
 use Doctrine\Common\Collections\ArrayCollection;
 
-abstract class DirectDebit
-    implements IDirectDebit
+/**
+ * Class DirectDebit
+ * @package ChrKo\SEPA
+ */
+class DirectDebit
 {
     /**
-     * @var ICreditor
+     * @var Creditor
      */
     protected $creditor;
 
@@ -42,9 +36,9 @@ abstract class DirectDebit
     protected $mandates;
 
     /**
-     * @inheritdoc
+     * @param Creditor $creditor
      */
-    public function __construct(ICreditor $creditor)
+    public function __construct(Creditor $creditor)
     {
         $this->setDueDate(new \DateTime());
         $this->setCreditor($creditor);
@@ -53,9 +47,11 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @param Creditor $creditor
+     *
+     * @return $this
      */
-    public function setCreditor(ICreditor $creditor)
+    public function setCreditor(Creditor $creditor)
     {
         $this->creditor = $creditor;
 
@@ -63,7 +59,7 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @return Creditor
      */
     public function getCreditor()
     {
@@ -71,7 +67,9 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @param string|\DateTime $dueDate
+     *
+     * @return $this
      */
     public function setDueDate($dueDate)
     {
@@ -90,7 +88,7 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @return \DateTime
      */
     public function getDueDate()
     {
@@ -98,7 +96,9 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @param float $amount
+     *
+     * @return $this
      */
     public function setAmount($amount)
     {
@@ -112,7 +112,7 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @return float
      */
     public function getAmount()
     {
@@ -120,7 +120,9 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @param string $reference
+     *
+     * @return $this
      */
     public function setReference($reference)
     {
@@ -130,7 +132,7 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
     public function getReference()
     {
@@ -138,9 +140,11 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @param Mandate $mandate
+     *
+     * @return $this
      */
-    public function addMandate(IMandate $mandate)
+    public function addMandate(Mandate $mandate)
     {
         $this->mandates[] = $mandate;
 
@@ -148,9 +152,11 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @param Mandate $mandate
+     *
+     * @return $this
      */
-    public function removeMandate(IMandate $mandate)
+    public function removeMandate(Mandate $mandate)
     {
         $this->mandates->removeElement($mandate);
 
@@ -158,7 +164,7 @@ abstract class DirectDebit
     }
 
     /**
-     * @inheritdoc
+     * @return ArrayCollection
      */
     public function getMandates()
     {

@@ -1,20 +1,27 @@
 <?php
 
-namespace ChrKo\SEPA\Abstracts;
+namespace ChrKo\SEPA;
 
 use ChrKo\SEPA\Exceptions\InvalidStateException;
-use ChrKo\SEPA\Interfaces\Mandate as IMandate;
 
+use ChrKo\SEPA\Interfaces\BankAccountUser as IBankAccountUser;
 use ChrKo\SEPA\Traits\BankAccountUser;
 
 /**
  * Class Mandate
- * @package ChrKo\SEPA\Abstracts
+ * @package ChrKo\SEPA
  */
-abstract class Mandate
-    implements IMandate
+class Mandate
+    implements IBankAccountUser
 {
     use BankAccountUser;
+
+    const FIRST = 1;
+    const RECURRING = 2;
+    const LAST = 3;
+
+    const UNIQUE = 'OOFF';
+    const ONE_OFF = 'OOFF';
 
     /**
      * @var string
@@ -27,19 +34,19 @@ abstract class Mandate
     protected $mandateDate;
 
     /**
-     * @var IMandate
+     * @var Mandate
      */
     protected $oldMandate = null;
 
     /**
      * @var string|integer
      */
-    protected $type = IMandate::RECURRING;
+    protected $type = self::RECURRING;
 
     /**
      * @var string
      */
-    protected $state = IMandate::FIRST;
+    protected $state = self::FIRST;
 
     public function __construct()
     {
@@ -92,7 +99,7 @@ abstract class Mandate
     /**
      * @inheritdoc
      */
-    public function setOldMandate(IMandate $oldMandate)
+    public function setOldMandate(Mandate $oldMandate)
     {
         $this->oldMandate = $oldMandate;
     }
@@ -110,12 +117,12 @@ abstract class Mandate
      */
     public function setType($type)
     {
-        if (!in_array($type, [IMandate::RECURRING, IMandate::UNIQUE], true)) {
+        if (!in_array($type, [static::RECURRING, static::UNIQUE], true)) {
             throw new \InvalidArgumentException('Only Mandate::RECURRING or Mandate::UNIQUE are allowed.');
         }
 
-        if ($type === IMandate::UNIQUE) {
-            $this->state = IMandate::ONE_OFF;
+        if ($type === static::UNIQUE) {
+            $this->state = static::ONE_OFF;
         }
 
         $this->type = $type;
@@ -144,25 +151,25 @@ abstract class Mandate
      */
     public function setState($state)
     {
-        if (!in_array($state, [IMandate::FIRST, IMandate::RECURRING, IMandate::LAST, IMandate::ONE_OFF], true)) {
+        if (!in_array($state, [static::FIRST, static::RECURRING, static::LAST, static::ONE_OFF], true)) {
             throw new \InvalidArgumentException('Only Mandate::FIRST, Mandate::RECURRING, Mandate::LAST, Mandate::ONE_OFF');
         }
 
         switch ($this->type) {
-            case IMandate::RECURRING:
+            case static::RECURRING:
                 switch ($this->state) {
-                    case IMandate::FIRST:
-                        if (!in_array($state, [IMandate::FIRST, IMandate::RECURRING, IMandate::LAST])) {
+                    case static::FIRST:
+                        if (!in_array($state, [static::FIRST, static::RECURRING, static::LAST])) {
                             break;
                         }
                         break 2;
-                    case IMandate::RECURRING:
-                        if (!in_array($state, [IMandate::RECURRING, IMandate::LAST])) {
+                    case static::RECURRING:
+                        if (!in_array($state, [static::RECURRING, static::LAST])) {
                             break;
                         }
                         break 2;
-                    case IMandate::LAST:
-                        if ($state !== IMandate::LAST) {
+                    case static::LAST:
+                        if ($state !== static::LAST) {
                             break;
                         }
                         break 2;
@@ -171,8 +178,8 @@ abstract class Mandate
                 }
                 throw new InvalidStateException('Setting the state on failed.');
                 break;
-            case IMandate::UNIQUE:
-                if ($state !== IMandate::ONE_OFF) {
+            case static::UNIQUE:
+                if ($state !== static::ONE_OFF) {
                     throw new InvalidStateException('Cannot set any other state on a one time mandate.');
                 }
                 break;
